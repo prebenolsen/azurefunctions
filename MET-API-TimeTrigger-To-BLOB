@@ -1,0 +1,41 @@
+import datetime
+import logging
+import json
+
+from azure.storage.blob import ContainerClient
+from azure.keyvault.secrets import *
+from azure.keyvault.secrets import SecretClient
+from azure.identity import DefaultAzureCredential
+import azure.functions as func
+
+
+def main(mytimer: func.TimerRequest) -> None:
+    
+    filename = "Timetrigger/test{ts}.json".format(ts=datetime.datetime.now().timestamp())
+    text_content = "Hello everyone"
+
+    # Initialize the Credentials.
+    default_credential = DefaultAzureCredential()
+
+    # Create a Secret Client, so we can grab our Connection String.
+    secret_client = SecretClient(
+        vault_url='https://REDACTED.vault.azure.net/',
+        credential=default_credential
+    )
+
+     # Grab the Blob Connection String, from our Azure Key Vault.
+    blob_conn_string = secret_client.get_secret(
+        name='blob-storage-connection-string'
+    )
+
+     # Connect to the Container.
+    container_client = ContainerClient.from_connection_string(
+        conn_str=blob_conn_string.value,
+        container_name='blobtriggerfiles'
+    )
+
+    container_client.upload_blob(
+        name=filename,
+        data=json.dumps(obj=text_content, indent=4),
+        blob_type="BlockBlob"
+    )
