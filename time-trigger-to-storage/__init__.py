@@ -19,7 +19,7 @@ def main(mytimer: func.TimerRequest) -> None:
 
     # Create a Secret Client, so we can grab our Connection String.
     secret_client = SecretClient(
-        vault_url='https://triggerblobkeyvault.vault.azure.net/',
+        vault_url='https://REDACTED.vault.azure.net/',
         credential=default_credential
     )
 
