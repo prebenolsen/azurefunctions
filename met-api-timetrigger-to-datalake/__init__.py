@@ -56,6 +56,7 @@ def main(mytimer: func.TimerRequest) -> None:
         json_raw = response.json()
         json_timeseries = json_raw['properties']['timeseries']
         json_timeseries_flattened = pd.json_normalize(json_timeseries)
+        json_timeseries_flattened['time_created'] = datetime.datetime.now()
         filename = f"{loc}/{date}/{date_hour_minute}.csv"
         csv_timeseries = json_timeseries_flattened.to_csv(index=False)
 
@@ -65,4 +66,4 @@ def main(mytimer: func.TimerRequest) -> None:
             blob_type="BlockBlob")
         sleep(1)
     
-    logging.info("=== Successfully inserted data to blob")
+    logging.info("=== Success")
