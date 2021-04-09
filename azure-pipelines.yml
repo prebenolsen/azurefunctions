@@ -16,7 +16,7 @@ variables:
   azureSubscriptionConnection: "ARMConnection"
   slot: "staging"
 
-job: job1
+steps:
 - task: AzureFunctionApp@1
   inputs:
     azureSubscription: $(azureSubscriptionConnection)
