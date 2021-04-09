@@ -6,21 +6,19 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+variables:
+  # Azure service connection established during pipeline creation
+  azureSubscription: 'c36c8c10-baa0-4872-969d-5579591bca1d'
+  appName: 'met-api-function-app'
+  azureSubscriptionConnection: 'ARMConnection''
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+  
 - task: AzureFunctionApp@1
   inputs:
-    azureSubscription: 'ARMConnection'
+    azureSubscription: '$(azureSubscriptionConnection)'
     appType: 'functionAppLinux'
-    appName: 'met-api-function-app'
+    appName: $(appName)
     package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    #package: $(System.ArtifactsDirectory)/**/*.zip (alternative)
     runtimeStack: 'PYTHON|3.8'
