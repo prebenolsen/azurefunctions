@@ -17,3 +17,10 @@ steps:
     echo Add other tasks to build, test, and deploy your project.
     echo See https://aka.ms/yaml
   displayName: 'Run a multi-line script'
+- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: 'ARMConnection'
+    appType: 'functionAppLinux'
+    appName: 'met-api-function-app'
+    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    runtimeStack: 'PYTHON|3.8'
