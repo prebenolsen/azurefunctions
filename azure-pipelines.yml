@@ -3,8 +3,10 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-trigger:
-- main
+trigger: true
+
+pool:
+  vmImage: "ubuntu-latest"
 
 variables:
   # Azure service connection established during pipeline creation
@@ -19,9 +21,8 @@ variables:
     azureSubscription: $(azureSubscriptionConnection)
     appType: "functionAppLinux"
     appName: $(appName)
-    package: "$(System.DefaultWorkingDirectory)/**/*.zip"
-    #package: $(System.ArtifactsDirectory)/**/*.zip (alternative)
+    package: "$(System.DefaultWorkingDirectory)/**/*.zip" #$(System.ArtifactsDirectory) alternative
     runtimeStack: "PYTHON|3.8"
-    resourceGroupName: $(azureRgName)
-    slotName: $(slot)
-    
+    # Only required for deployment to slot
+    #resourceGroupName: $(azureRgName)
+    #slotName: $(slot)
