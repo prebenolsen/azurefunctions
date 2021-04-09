@@ -9,16 +9,19 @@ trigger:
 variables:
   # Azure service connection established during pipeline creation
   azureSubscription: 'c36c8c10-baa0-4872-969d-5579591bca1d'
-  appName: 'met-api-function-app'
-  azureSubscriptionConnection: 'ARMConnection''
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-  
+  azureRgName: "met-api-rg"
+  appName: "met-api-function-app"
+  azureSubscriptionConnection: "ARMConnection"
+  slot: "staging"
+
 - task: AzureFunctionApp@1
   inputs:
-    azureSubscription: '$(azureSubscriptionConnection)'
-    appType: 'functionAppLinux'
+    azureSubscription: $(azureSubscriptionConnection)
+    appType: "functionAppLinux"
     appName: $(appName)
-    package: '$(System.DefaultWorkingDirectory)/**/*.zip'
+    package: "$(System.DefaultWorkingDirectory)/**/*.zip"
     #package: $(System.ArtifactsDirectory)/**/*.zip (alternative)
-    runtimeStack: 'PYTHON|3.8'
+    runtimeStack: "PYTHON|3.8"
+    resourceGroupName: $(azureRgName)
+    slotName: $(slot)
+    
